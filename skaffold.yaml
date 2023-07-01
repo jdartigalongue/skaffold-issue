@@ -1,0 +1,31 @@
+apiVersion: skaffold/v4beta2
+kind: Config
+build:
+  local:
+    concurrency: 5
+    push: false
+  artifacts:
+    - image: myservice
+      context: .
+      ko: {}
+
+deploy:
+  helm:
+    releases:
+      - name: myapp
+        chartPath: ./chart
+        namespace: default
+        setValueTemplates:
+          image: myservice
+
+profiles:
+  - name: test
+    manifests:
+      helm:
+        releases:
+          - name: myapp
+            chartPath: ./chart
+            setValues:
+              image: myservice
+    deploy:
+      kubectl: {}

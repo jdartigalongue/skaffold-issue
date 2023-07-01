@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myservice
+  labels:
+    app: {{ .Chart.Name }}
+    service: myservice
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+      service: myservice
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        service: myservice
+    spec:
+      containers:
+        - name: myservice
+          image: {{ .Values.image }}
